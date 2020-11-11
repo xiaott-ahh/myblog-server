@@ -38,6 +38,16 @@ public class BlogServiceImp implements BlogService{
     }
 
     @Override
+    public List<Blog> getByPage(int startIndex) {
+        try {
+            return blogMapper.selectFromStartIndex(startIndex);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public List<Blog> getTopFive() {
         try {
             return blogMapper.selectAll()

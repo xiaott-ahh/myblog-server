@@ -2,9 +2,6 @@ package com.xiaott.blog.mapper;
 
 import com.xiaott.blog.entity.Blog;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import javax.swing.text.BadLocationException;
 import java.util.List;
 
 
@@ -21,6 +18,10 @@ public interface BlogMapper {
     @ResultMap(value="result")
     @Select("select * from blogs")
     List<Blog> selectAll();
+
+    @ResultMap(value = "result")
+    @Select("select * from blogs limit #{startIndex},10")
+    List<Blog> selectFromStartIndex(@Param("startIndex") int startIndex);
 
     @ResultMap(value="result")
     @Select("select * from blogs where tags like concat('%',#{tag},'%')")

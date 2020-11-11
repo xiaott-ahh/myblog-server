@@ -6,19 +6,21 @@ import java.util.List;
 
 public interface BlogService {
 
-    public List<Blog> list();
+    List<Blog> list();
 
-    public Blog getById(int id);
+    Blog getById(int id);
 
-    public List<Blog> getTopFive();
+    List<Blog> getByPage(int startIndex);
 
-    public List<Blog> getByKeywords(String keywords);
+    List<Blog> getTopFive();
 
-    public List<Blog> getByTag(String tag);
+    List<Blog> getByKeywords(String keywords);
 
-    public void add(Blog blog);
+    List<Blog> getByTag(String tag);
 
-    public void update(Blog blog);
+    void add(Blog blog);
 
-    public void deleteById(int id);
+    void update(Blog blog);
+
+    void deleteById(int id);
 }

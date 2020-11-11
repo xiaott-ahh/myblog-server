@@ -1,6 +1,7 @@
 package com.xiaott.blog.controller;
 
 import com.xiaott.blog.entity.Blog;
+import com.xiaott.blog.entity.User;
 import com.xiaott.blog.result.Result;
 import com.xiaott.blog.result.ResultFactory;
 import com.xiaott.blog.service.BlogService;
@@ -31,6 +32,12 @@ public class BlogController {
     Blog getById(@PathVariable("id") int id) {
         System.out.printf("返回id=%d的博客.\n",id);
         return blogServiceImp.getById(id);
+    }
+
+    @GetMapping("api/blogs/{startIndex}")
+    List<Blog> listFromStartIndex(@PathVariable("startIndex") int startIndex) {
+        System.out.printf("返回起始下标为:%d的10篇博客",startIndex);
+        return blogServiceImp.getByPage(startIndex);
     }
 
     @GetMapping("api/tag/blogs")
@@ -95,8 +102,7 @@ public class BlogController {
             f.getParentFile().mkdirs();
         try {
             file.transferTo(f);
-            String imgURL = "http://localhost:8088/api/file/" + f.getName();
-            return imgURL;
+            return "http://localhost:8088/api/file/" + f.getName();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -122,5 +128,15 @@ public class BlogController {
         }else {
             return ResultFactory.buildFailRep("不是有效的文件路径");
         }
+    }
+
+    /*
+    登录验证
+     */
+    @PostMapping("api/login")
+    public Result login(@RequestBody User user) {
+        if (user == null || ! user.getUsername().equals("xiaoTT") || ! user.getPassword().equals("password"))
+            return ResultFactory.buildFailRep("账户密码错误.");
+        return ResultFactory.buildSuccessRep("登录成功");
     }
 }
