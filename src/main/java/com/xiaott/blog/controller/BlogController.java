@@ -1,10 +1,12 @@
 package com.xiaott.blog.controller;
 
 import com.xiaott.blog.entity.Blog;
+import com.xiaott.blog.entity.BlogIdAndTitle;
 import com.xiaott.blog.entity.User;
 import com.xiaott.blog.result.Result;
 import com.xiaott.blog.result.ResultFactory;
 import com.xiaott.blog.service.BlogService;
+import com.xiaott.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,11 +23,19 @@ public class BlogController {
     @Autowired
     private BlogService blogServiceImp;
 
+    @Autowired
+    private UserService userService;
 
     @GetMapping("api/blogs")
     List<Blog> list() {
         System.out.println("请求加载所有博客.");
         return blogServiceImp.list();
+    }
+
+    @GetMapping("api/getAllInfo/blogs")
+    List<BlogIdAndTitle> getInfos() {
+        System.out.println("访问了归档");
+        return blogServiceImp.getAllBlogsInfo();
     }
 
     @GetMapping("api/getblog/{id}")
@@ -36,7 +46,7 @@ public class BlogController {
 
     @GetMapping("api/blogs/{startIndex}")
     List<Blog> listFromStartIndex(@PathVariable("startIndex") int startIndex) {
-        System.out.printf("返回起始下标为:%d的10篇博客",startIndex);
+        System.out.printf("返回起始下标为:%d的9篇博客",startIndex);
         return blogServiceImp.getByPage(startIndex);
     }
 
@@ -47,7 +57,7 @@ public class BlogController {
     }
 
     @GetMapping("api/newest/blogs")
-    List<Blog> listByTime() {
+    List<BlogIdAndTitle> listByTime() {
         System.out.println("请求最新的五篇博客");
         return blogServiceImp.getTopFive();
     }
@@ -56,6 +66,13 @@ public class BlogController {
     List<Blog> listByKeywords(@RequestParam("keywords") String keywords) {
         System.out.printf("请求关键词为：%s的博客",keywords);
         return blogServiceImp.getByKeywords(keywords);
+    }
+
+    @GetMapping("api/blogs/nums")
+    Integer getBlogsNums() {
+        int nums = blogServiceImp.getNums();
+        System.out.printf("返回博客总数: %d\n",nums);
+        return nums;
     }
 
     @PostMapping("api/blogs")
@@ -72,6 +89,7 @@ public class BlogController {
                 return ResultFactory.buildSuccessRep("发布成功");
             }
         }catch (RuntimeException e) {
+            e.printStackTrace();
             return ResultFactory.buildFailRep("请求失败");
         }
     }
@@ -92,7 +110,7 @@ public class BlogController {
      */
     @PostMapping("/api/admin/blog/images")
     public String coversUpload(MultipartFile file) throws Exception {
-        String folder = "D:/workspace/myblog/cover/";
+        String folder = "/home/myblog/images";
         File imageFolder = new File(folder);
         //对文件重命名，保留文件的格式png/jpg
         String newName = UUID.randomUUID().toString();
@@ -102,7 +120,7 @@ public class BlogController {
             f.getParentFile().mkdirs();
         try {
             file.transferTo(f);
-            return "http://localhost:8088/api/file/" + f.getName();
+            return "http://8.131.110.169:8088/api/file/" + f.getName();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -115,7 +133,7 @@ public class BlogController {
     @PostMapping("api/admin/blog/images/delete")
     public Result deleteBlogImage(@RequestBody Map<String,String> body) {
         String url = body.get("url");
-        String fileUrl = url.replace("http://localhost:8088/api/file/","d:/workspace/myblog/cover/");
+        String fileUrl = url.replace("http://8.131.110.169:8088/api/file/","/home/myblog/images/");
         System.out.println(fileUrl);
         File file = new File(fileUrl);
         if (file.isFile() && file.exists()) {
@@ -135,8 +153,10 @@ public class BlogController {
      */
     @PostMapping("api/login")
     public Result login(@RequestBody User user) {
-        if (user == null || ! user.getUsername().equals("xiaoTT") || ! user.getPassword().equals("password"))
-            return ResultFactory.buildFailRep("账户密码错误.");
+        User user1 = userService.getUserByName(user.getUsername());
+        if (user1 == null || ! user1.getPassword().equals(user.getPassword())) {
+            return ResultFactory.buildFailRep("账户或密码错误");
+        }
         return ResultFactory.buildSuccessRep("登录成功");
     }
 }

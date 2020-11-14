@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
@@ -33,10 +34,12 @@ import java.io.File;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan
+@EnableScheduling
 @MapperScan("com.xiaott.blog.mapper")
 @PropertySource("classpath:/jdbc.properties")
 public class MyBlogApplication {
-
+    //使用嵌入式Tomcat则需要这段代码配置
+    /*
     public static void main(String[] args) throws Exception{
         //System.getProperty("java.classpath");
         Tomcat tomcat = new Tomcat();
@@ -50,7 +53,7 @@ public class MyBlogApplication {
         tomcat.start();
         tomcat.getServer().await();
     }
-
+    */
     @Value("${jdbc.url}")
     String jdbcUrl;
 
@@ -109,13 +112,15 @@ public class MyBlogApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8081")
+                        .allowedOrigins("http://8.131.110.169:8080")
+                        //.allowedOrigins("http://localhost:8080")
                         .allowedMethods("GET","POST","PUT","DELETE");
             }
 
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/api/file/**").addResourceLocations("file:" + "d:/workspace/myblog/cover/");
+                registry.addResourceHandler("/api/file/**").addResourceLocations("file:" + "/home/myblog/images/");
+
             }
         };
     }
