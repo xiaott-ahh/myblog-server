@@ -38,8 +38,8 @@ import java.io.File;
 @MapperScan("com.xiaott.blog.mapper")
 @PropertySource("classpath:/jdbc.properties")
 public class MyBlogApplication {
-    //使用嵌入式Tomcat则需要这段代码配置
     /*
+    //使用嵌入式Tomcat则需要这段代码配置
     public static void main(String[] args) throws Exception{
         //System.getProperty("java.classpath");
         Tomcat tomcat = new Tomcat();
@@ -109,14 +109,15 @@ public class MyBlogApplication {
     @Bean
     WebMvcConfigurer createWebMvcConfigurer() {
         return new WebMvcConfigurer() {
+            /*
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://8.131.110.169:8080")
-                        //.allowedOrigins("http://localhost:8080")
+                        //.allowedOrigins("http://8.131.110.169:8080")
+                        .allowedOrigins("http://localhost:8080")
                         .allowedMethods("GET","POST","PUT","DELETE");
             }
-
+            */
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/api/file/**").addResourceLocations("file:" + "/home/myblog/images/");

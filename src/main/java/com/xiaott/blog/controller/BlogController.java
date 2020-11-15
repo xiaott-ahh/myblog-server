@@ -120,7 +120,7 @@ public class BlogController {
             f.getParentFile().mkdirs();
         try {
             file.transferTo(f);
-            return "http://8.131.110.169:8088/api/file/" + f.getName();
+            return "http://8.131.110.169/api/file/" + f.getName();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -133,7 +133,7 @@ public class BlogController {
     @PostMapping("api/admin/blog/images/delete")
     public Result deleteBlogImage(@RequestBody Map<String,String> body) {
         String url = body.get("url");
-        String fileUrl = url.replace("http://8.131.110.169:8088/api/file/","/home/myblog/images/");
+        String fileUrl = url.replace("http://8.131.110.169/api/file/","/home/myblog/images/");
         System.out.println(fileUrl);
         File file = new File(fileUrl);
         if (file.isFile() && file.exists()) {

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class BlogServiceImp implements BlogService{
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    //protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     BlogMapper blogMapper;
@@ -153,7 +153,7 @@ public class BlogServiceImp implements BlogService{
                                                  .collect(Collectors.toList());
             //当天24点失效
             redisUtil.lSet(key,res,getRemainSecondsOneDay(new Date(),1));
-            return res;
+            return res.stream().limit(5).collect(Collectors.toList());
         }
     }
 

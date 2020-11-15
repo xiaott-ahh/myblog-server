@@ -24,7 +24,7 @@ public class Blog {
     //点赞数
     private int likeNum;
     //浏览数
-    private long visitedNum;
+    private int visitedNum;
 
     //标签
     private String tags;
@@ -93,11 +93,11 @@ public class Blog {
         this.likeNum = likeNum;
     }
 
-    public long getVisitedNum() {
+    public int getVisitedNum() {
         return visitedNum;
     }
 
-    public void setVisitedNum(long visitedNum) {
+    public void setVisitedNum(int visitedNum) {
         this.visitedNum = visitedNum;
     }
 

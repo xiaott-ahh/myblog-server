@@ -45,7 +45,7 @@ public interface BlogMapper {
     Integer selectNums();
 
     @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")
-    @Insert("insert into blogs (title,abs,cover,blog_html,blog_md,created_at,like_num,visited_num,tags) values (#{blog.title},#{blog.abs},#{blog.cover},#{blog.blogHtml},#{blog.blogMd},#{blog.createdAt},#{blog.likeNum},#{blog.visitedNum},#{blog.tags})")
+    @Insert("insert into blogs (title,abs,cover,blog_html,blog_md,created_at,like_num,tags) values (#{blog.title},#{blog.abs},#{blog.cover},#{blog.blogHtml},#{blog.blogMd},#{blog.createdAt},#{blog.likeNum},#{blog.tags})")
     void insert(@Param("blog") Blog blog);
 
     @Update("update blogs set title=#{blog.title},abs=#{blog.abs},cover=#{blog.cover},blog_html=#{blog.blogHtml},blog_md=#{blog.blogMd},created_at=#{blog.createdAt},like_num=#{blog.likeNum},visited_num=#{blog.visitedNum},tags=#{blog.tags} where id = #{blog.id}")
